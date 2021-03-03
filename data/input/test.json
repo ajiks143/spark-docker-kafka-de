@@ -1,0 +1,55 @@
+{
+	"block_height": 672964,
+	"block_hash": "0000000000000000000bb5c0f83bb0602fa5012de97fee4cd433d13f1749f68b",
+	"block_time": 1614763288,
+	"confirmations": 1,
+	"fee": 89055065,
+	"hash": "e786c5a834ce5669938579719a155df1d39714b3f509d2922dfdc4e0e4d86e63",
+	"inputs_count": 1,
+	"inputs_value": 0,
+	"is_coinbase": true,
+	"is_double_spend": false,
+	"is_sw_tx": true,
+	"lock_time": 2093551047,
+	"outputs_count": 4,
+	"outputs_value": 714055065,
+	"sigops": 4,
+	"size": 362,
+	"version": 1,
+	"vsize": 335,
+	"weight": 1340,
+	"witness_hash": "a41deea1ebdab94f947c0d3dfeb11bb9c55adb26a7e8292336490ba66a531328",
+	"inputs": [{
+		"prev_addresses": [""],
+		"prev_position": -1,
+		"prev_tx_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+		"prev_type": "NONSTANDARD",
+		"prev_value": 0,
+		"sequence": 4294967295
+	}],
+	"outputs": [{
+		"addresses": ["1PQwtwajfHWyAkedss5utwBvULqbGocRpu"],
+		"value": 714055065,
+		"type": "P2PKH",
+		"spent_by_tx": "",
+		"spent_by_tx_position": -1
+	}, {
+		"addresses": [""],
+		"value": 0,
+		"type": "NULL_DATA",
+		"spent_by_tx": "",
+		"spent_by_tx_position": -1
+	}, {
+		"addresses": [""],
+		"value": 0,
+		"type": "NULL_DATA",
+		"spent_by_tx": "",
+		"spent_by_tx_position": -1
+	}, {
+		"addresses": [""],
+		"value": 0,
+		"type": "NULL_DATA",
+		"spent_by_tx": "",
+		"spent_by_tx_position": -1
+	}]
+}
