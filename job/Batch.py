@@ -36,7 +36,7 @@ def read_input(spark, data_format="csv", input_type="card"):
     :return: None
     """
 
-    df = spark.read.format(data_format).options(header=True).load("data/input/" + input_type + "." + data_format)
+    df = spark.read.format(data_format).options(header=True).load("/app/xapo/data/input/" + input_type + "." + data_format)
     df.createOrReplaceTempView(input_type)
 
     return input_type
@@ -70,7 +70,7 @@ def run_batch_job(spark):
     card_details_df.createOrReplaceTempView("card_details")
 
     # !!!Coalesce(1) is not a good practise in Production
-    card_details_df.coalesce(1).write.format("csv").options(header=True).save("data/output/card_details")
+    card_details_df.coalesce(1).write.format("csv").mode('overwrite').options(header=True).save("/app/xapo/data/output/card_details")
 
     card_activated_firstuse_df = spark.sql("""WITH cleansedcarddetails
         AS (SELECT card,
@@ -90,7 +90,7 @@ def run_batch_job(spark):
         AND Datediff(To_timestamp(firstuseddate, 'yyyy-MM-dd HH:mm:ss'),
                To_timestamp(activationdate, 'yyyy-MM-dd HH:mm:ss')) > 10""")
 
-    card_activated_firstuse_df.coalesce(1).write.format("csv").options(header=True).save("data/output/card_activated_firstuse")
+    card_activated_firstuse_df.coalesce(1).write.format("csv").mode('overwrite').options(header=True).save("/app/xapo/data/output/card_activated_firstuse")
 
     cancelled_cards_df = spark.sql("""SELECT card_id AS card,
         activation_date,
@@ -100,7 +100,7 @@ def run_batch_job(spark):
         FROM card_instance
         WHERE deactivation_date IS NOT NULL AND activation_date IS NOT NULL""")
 
-    cancelled_cards_df.coalesce(1).write.format("csv").options(header=True).save("data/output/cancelled_cards")
+    cancelled_cards_df.coalesce(1).write.format("csv").mode('overwrite').options(header=True).save("/app/xapo/data/output/cancelled_cards")
 
     merchant_transaction_df = spark.sql("""SELECT merchant_name,
         Count(*) AS nooftransactions
@@ -108,7 +108,7 @@ def run_batch_job(spark):
         GROUP  BY merchant_name
         ORDER  BY nooftransactions DESC """)
 
-    merchant_transaction_df.coalesce(1).write.format("csv").options(header=True).save("data/output/merchant_transactions")
+    merchant_transaction_df.coalesce(1).write.format("csv").mode('overwrite').options(header=True).save("/app/xapo/data/output/merchant_transactions")
 
     transactions_status_merchant_df = spark.sql("""SELECT merchant_name,
             status,
@@ -117,7 +117,7 @@ def run_batch_job(spark):
         GROUP BY merchant_name,
             status""")
 
-    transactions_status_merchant_df.coalesce(1).write.format("csv").options(header=True).save("data/output/transactions_status_merchant")
+    transactions_status_merchant_df.coalesce(1).write.format("csv").mode('overwrite').options(header=True).save("/app/xapo/data/output/transactions_status_merchant")
 
     highest_spending_cards_df = spark.sql("""SELECT card_id
         FROM   (SELECT card_id,
@@ -133,7 +133,7 @@ def run_batch_job(spark):
                 GROUP  BY card_id))
         WHERE  rnk <= 10""")
 
-    highest_spending_cards_df.coalesce(1).write.format("csv").options(header=True).save("data/output/highest_spending_cards")
+    highest_spending_cards_df.coalesce(1).write.format("csv").mode('overwrite').options(header=True).save("/app/xapo/data/output/highest_spending_cards")
 
 # entry point for PySpark application
 if __name__ == '__main__':
