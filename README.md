@@ -28,9 +28,12 @@ _**Use-case**_
 		 
  _**Data Flow:**_
  
+ ![](resources/Dataflow.png)
+ 
  _**Project set up:**_
  
-
+ ![](resources/ProjectStructure.png)
+ 
  - data - Contains input data required for processing
  - dependencies - Python code for setting Spark session and Logger 
  - job - Application code to perform Logic processing
