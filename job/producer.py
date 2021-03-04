@@ -17,7 +17,7 @@ datasets = response['data']['list']
 
 #Sending the data to Kafka Topic
 for dataset in datasets:
-    producer.send('xapo1', dataset)
+    producer.send('xapo2', dataset)
 
 
 

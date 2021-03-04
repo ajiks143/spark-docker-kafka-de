@@ -12,32 +12,43 @@ def main():
 
     logs.info('Real time job is up-and-running')
 
+    schema = spark.read.options(multiLine=True).json("data/input/test.json").schema
+
     df = spark \
         .readStream \
         .format("kafka") \
         .option("kafka.bootstrap.servers", "localhost:19092") \
-        .option("subscribe", "xapo1") \
+        .option("subscribe", "xapo2") \
         .option("startingOffsets", "earliest") \
         .load()
 
     string_df = df.selectExpr("CAST(value AS STRING)")
 
-    json_schema = StructType(List(StructField(block_hash,StringType,true),StructField(block_height,LongType,true),StructField(block_time,LongType,true),StructField(confirmations,LongType,true),StructField(fee,LongType,true),StructField(hash,StringType,true),StructField(inputs,ArrayType(StructType(List(StructField(prev_addresses,ArrayType(StringType,true),true),StructField(prev_position,LongType,true),StructField(prev_tx_hash,StringType,true),StructField(prev_type,StringType,true),StructField(prev_value,LongType,true),StructField(sequence,LongType,true))),true),true),StructField(inputs_count,LongType,true),StructField(inputs_value,LongType,true),StructField(is_coinbase,BooleanType,true),StructField(is_double_spend,BooleanType,true),StructField(is_sw_tx,BooleanType,true),StructField(lock_time,LongType,true),StructField(outputs,ArrayType(StructType(List(StructField(addresses,ArrayType(StringType,true),true),StructField(spent_by_tx,StringType,true),StructField(spent_by_tx_position,LongType,true),StructField(type,StringType,true),StructField(value,LongType,true))),true),true),StructField(outputs_count,LongType,true),StructField(outputs_value,LongType,true),StructField(sigops,LongType,true),StructField(size,LongType,true),StructField(version,LongType,true),StructField(vsize,LongType,true),StructField(weight,LongType,true),StructField(witness_hash,StringType,true)))
-
-    json_df = string_df.withColumn("jsonData", from_json(col("value"), json_schema)).select("jsondata.*")
-
+    json_df = string_df \
+        .withColumn("jsonData", from_json(col("value"), schema)) \
+        .select("jsonData.block_height","jsonData.block_time", "jsonData.fee", "jsonData.outputs") \
+        .withColumn("exp_outputs",explode(col("outputs"))) \
+        .select("block_height","block_time","fee","exp_outputs.*") \
+        .select("block_height","block_time","fee","addresses","value") \
+        .withColumn("exp_address", explode(col("addresses"))) \
+        .select("block_height","block_time","fee",col("exp_address").alias("addresses"),"value") \
+        .selectExpr("block_height","to_timestamp(block_time) as block_time","fee","addresses","value") \
+        .filter(col("addresses") != "")
     json_df.printSchema()
-
     
-    #string_df \
-    #    .writeStream \
-    #    .outputMode("append") \
-    #    .format("console") \
-    #    .option("truncate", "false") \
-    #    .start().awaitTermination()
+    json_df \
+        .writeStream \
+        .format("csv") \
+        .option("path","data/output/streamoutput/") \
+        .trigger(processingTime='10 seconds') \
+        .option("checkpointLocation", "/tmp/checkpoint/") \
+        .option("header", True) \
+        .outputMode("append") \
+        .start() \
+        .awaitTermination()
 
     logs.info('Real time job is finished')
-    spark.stop()
+    #spark.stop()
     return None
 
 # entry point for PySpark application
