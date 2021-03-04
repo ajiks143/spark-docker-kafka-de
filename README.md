@@ -10,6 +10,18 @@ _**Tool stack used:**_
 | Docker| 19.03.6 |
 | Java| 1.8.x |
 
+ ## Project set up
+ 
+ 
+ ![](resources/ProjectStructure.png)
+ 
+ - data - Contains input data required for processing
+ - dependencies - Python code for setting Spark session and Logger 
+ - job - Application code to perform Logic processing
+ - build-docker.sh - Builds the Dockerfile and runs the docker container
+ - Dockerfile - For setting up Docker container
+ - entrypoint.sh - Script that runs when docker container is instantiated, This runs the spark-submit internally.
+ - kakfa - Config file for creating Kafka container with Broker and Zookeeper
 
 ## **Batch Use-case**
 _**Use-case**_
@@ -24,22 +36,10 @@ _**Use-case**_
  4. transactions.csv - Details of transactions done using the card
  5. currency.csv - This is file added to bring transaction amount to a  
     unified currency (EUR)
-
 		 
  _**Data Flow:**_
  
  ![](resources/Dataflow.png)
- 
- _**Project set up:**_
- 
- ![](resources/ProjectStructure.png)
- 
- - data - Contains input data required for processing
- - dependencies - Python code for setting Spark session and Logger 
- - job - Application code to perform Logic processing
- - build-docker.sh - Builds the Dockerfile and runs the docker container
- - Dockerfile - For setting up Docker container
- - entrypoint.sh - Script that runs when docker container is instantiated, This runs the spark-submit internally.
 
 _**Code Execution:**_
 
