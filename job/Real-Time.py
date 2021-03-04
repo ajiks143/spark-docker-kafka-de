@@ -12,13 +12,15 @@ def main():
 
     logs.info('Real time job is up-and-running')
 
-    schema = spark.read.options(multiLine=True).json("data/input/test.json").schema
+    # Rather than Spark infering schema , best option to use a sample json to retrieve Schema from the sample json
+    schema = spark.read.options(multiLine=True).json("/app/xapo/data/input/sample.json").schema
 
+    logs.info('Reading from Kafka topic...')
     df = spark \
         .readStream \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:19092") \
-        .option("subscribe", "xapo2") \
+        .option("kafka.bootstrap.servers", "broker:9092") \
+        .option("subscribe", "xapo") \
         .option("startingOffsets", "earliest") \
         .load()
 
@@ -36,10 +38,11 @@ def main():
         .filter(col("addresses") != "")
     json_df.printSchema()
     
+    logs.info('Writing the stream ouput...')
     json_df \
         .writeStream \
         .format("csv") \
-        .option("path","data/output/streamoutput/") \
+        .option("path","/app/xapo/data/output/streamoutput/") \
         .trigger(processingTime='10 seconds') \
         .option("checkpointLocation", "/tmp/checkpoint/") \
         .option("header", True) \
@@ -47,9 +50,7 @@ def main():
         .start() \
         .awaitTermination()
 
-    logs.info('Real time job is finished')
-    #spark.stop()
-    return None
+    logs.info('Real time job is finished...')
 
 # entry point for PySpark application
 if __name__ == '__main__':
