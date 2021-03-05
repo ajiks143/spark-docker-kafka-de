@@ -43,7 +43,7 @@ def main():
         .writeStream \
         .format("csv") \
         .option("path","/app/xapo/data/output/streamoutput/") \
-        .trigger(processingTime='10 seconds') \
+        .trigger(once=True) \
         .option("checkpointLocation", "/tmp/checkpoint/") \
         .option("header", True) \
         .outputMode("append") \
