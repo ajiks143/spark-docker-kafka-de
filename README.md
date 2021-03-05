@@ -23,7 +23,7 @@ _**Tool stack used:**_
  - entrypoint.sh - Script that runs when docker container is instantiated, This runs the spark-submit internally.
  - kafka - Config file for creating Kafka container with Broker and Zookeeper
 
-## **Batch Use-case**
+## **Batch Data pipeline**
 _**Use-case**_
 
 For the batch use-case, the data pipeline ingests source CSV files,
@@ -42,7 +42,7 @@ For the batch use-case, the data pipeline ingests source CSV files,
  
  ![](resources/BatchDataflow.png)
  
- ## **Real Time Use-case**
+ ## **Real Time Data pipeline**
  _**Use-case**_
  
  For the real time use-case, the data pipeline call the API https://chain.api.btc.com/v3/block/latest/tx, the JSON output is stored in Kafka Topic and processed using Spark Structured Streaming to generate the output.
