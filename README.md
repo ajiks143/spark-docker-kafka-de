@@ -15,13 +15,15 @@ _**Tool stack used:**_
  
  ![](resources/ProjectStructure.png)
  
- - data - Contains input data required for processing
- - dependencies - Python code for setting Spark session and Logger 
- - job - Application code to perform Logic processing
- - build-docker.sh - Builds the Dockerfile and runs the docker container
+ - data - Contains input data required for processing and sample output generated
+ - dependencies - Python code for setting up Spark session and Logger 
+ - job - Application code to perform Logic processing for Batch and Real time data processing
+ - build-docker.sh - Builds the Dockerfile and runs the docker container for Kafka and Spark
  - Dockerfile - For setting up Docker container
- - entrypoint.sh - Script that runs when docker container is instantiated, This runs the spark-submit internally.
- - kafka - Config file for creating Kafka container with Broker and Zookeeper
+ - entrypoint.sh - Script that runs when docker container is instantiated, This runs the spark-submit and Kafka producer scripts internally.
+ - kafka - Docker compose config file for creating Kafka container with Broker and Zookeeper
+ - resources - images files for README.md
+ - requirement.txt - Python libraries required for the build
 
 ## **Batch Data Pipeline**
 _**Use-case:**_
