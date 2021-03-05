@@ -21,11 +21,12 @@ _**Tool stack used:**_
  - build-docker.sh - Builds the Dockerfile and runs the docker container
  - Dockerfile - For setting up Docker container
  - entrypoint.sh - Script that runs when docker container is instantiated, This runs the spark-submit internally.
- - kakfa - Config file for creating Kafka container with Broker and Zookeeper
+ - kafka - Config file for creating Kafka container with Broker and Zookeeper
 
 ## **Batch Use-case**
 _**Use-case**_
- For the batch use-case, the data pipeline ingests source CSV files,
+
+For the batch use-case, the data pipeline ingests source CSV files,
    runs the business logic using Pyspark and writes the output as CSV to
    the desired folder structure.
    
@@ -39,7 +40,16 @@ _**Use-case**_
 		 
  _**Data Flow:**_
  
- ![](resources/Dataflow.png)
+ ![](resources/BatchDataflow.png)
+ 
+ ## **Real Time Use-case**
+ _**Use-case**_
+ 
+ For the real time use-case, the data pipeline call the API https://chain.api.btc.com/v3/block/latest/tx, the JSON output is stored in Kafka Topic and processed using Spark Structured Streaming to generate the output.
+ 
+  _**Data Flow:**_
+ 
+ ![](resources/RealTimeDataflow.png)
 
 _**Code Execution:**_
 
