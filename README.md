@@ -67,6 +67,13 @@ _**Code Execution:**_
     ```sh
     ./build-docker.sh <Docker Image name> <Mount path of Local>
     ```
+   
+_**Output:**_
+
+ - Sample output of the pipeline execution for both Batch and Real time is available under the path 
+    ```sh
+    data/output
+    ```
 
     
 
