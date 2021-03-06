@@ -9,6 +9,7 @@ _**Tool stack used:**_
 | Python| 3.7.x |
 | Docker| 19.03.6 |
 | Java| 1.8.x |
+| Kafka| 2.5.0|
 
  ## Project set up
  
